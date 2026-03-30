@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 const COOKIE_NAME = 'ibs-session'
 const PUBLIC_PATHS = ['/login', '/privacy', '/imprint']
 
-export function proxy(request: NextRequest) {
+export default function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const sessionCookie = request.cookies.get(COOKIE_NAME)
   const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p))
