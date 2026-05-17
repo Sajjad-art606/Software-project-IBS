@@ -3,14 +3,22 @@ import { guides } from '@/db/schema'
 import { mapRow } from '@/db/utils'
 import type { GuideCardData } from '@/components/guides/guide-card'
 import type { GuideStep } from '@/db/schema'
+import { cookies } from 'next/headers'
+import { COOKIE_NAME, decodeSession } from '@/lib/auth/session'
+import { GuidesClient } from './guides-client'
 
 export const metadata = {
   title: 'Process Guides | IBS Student Hub',
   description: 'Step-by-step guides for enrollment, exams, internship, thesis, and more.',
 }
-import { GuidesClient } from './guides-client'
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? null
+  const session = raw ? decodeSession(raw) : null
+  const userSemester = session?.semester ?? 1
+  const hasSession = session != null
+
   const allGuides = db
     .select()
     .from(guides)
@@ -26,6 +34,7 @@ export default function GuidesPage() {
         estimatedTime: g.estimatedTime ?? null,
         tags: g.tags as string[],
         steps: g.steps as GuideStep[],
+        relevantSemesters: g.relevantSemesters as number[],
       }),
     )
 
@@ -37,7 +46,7 @@ export default function GuidesPage() {
           Step-by-step guides for common academic processes and administrative tasks.
         </p>
       </div>
-      <GuidesClient guides={allGuides} />
+      <GuidesClient guides={allGuides} userSemester={userSemester} hasSession={hasSession} />
     </div>
   )
 }

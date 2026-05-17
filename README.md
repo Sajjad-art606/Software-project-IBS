@@ -148,6 +148,29 @@ pnpm db:seed
 - Populates the database with initial test data
 - Useful for development and testing
 
+#### Editing Process Guides
+1. Edit guide content in [`db/seed/guides.ts`](db/seed/guides.ts)
+2. Run `pnpm db:seed` to reload the database
+3. Verify changes at `/guides` and on individual guide pages
+
+Seed data is validated with Zod on each seed run (unique slugs, step ids, no placeholder `#` URLs).
+
+#### Process Guides API (optional integrations)
+The Next.js UI reads guides from the database on the server. These endpoints are available for external tools:
+
+- `GET /api/guides?semester=3&category=internship&limit=10`
+- `GET /api/guides/{slug}`
+
+Example:
+```bash
+curl "http://localhost:3000/api/guides?semester=1&limit=5"
+```
+
+#### Run Tests
+```bash
+pnpm test
+```
+
 #### Open Database Studio
 ```bash
 pnpm db:studio

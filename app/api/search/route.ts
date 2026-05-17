@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { guides, contacts, documents, platformLinks, internationalInfo } from '@/db/schema'
 import type { GuideStep } from '@/db/schema'
 import { mapRow } from '@/db/utils'
+import { filterBySemester } from '@/lib/guides/filter'
 
 type SearchResultType = 'guide' | 'contact' | 'document' | 'platform' | 'help'
 
@@ -31,18 +32,6 @@ function scoreItem(
   return score
 }
 
-function filterBySemester<T extends { relevantSemesters: number[] }>(
-  items: T[],
-  semester: number | null,
-): T[] {
-  if (!semester) return items
-  return items.filter(
-    (item) =>
-      item.relevantSemesters.length === 0 ||
-      item.relevantSemesters.includes(semester),
-  )
-}
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const q = searchParams.get('q')?.trim() ?? ''
@@ -58,10 +47,13 @@ export async function GET(request: Request) {
 
   // Search guides
   const allGuides = db.select().from(guides).all().map((g) => mapRow(guides, g))
-  const filteredGuides = filterBySemester(
-    allGuides as Array<typeof allGuides[0] & { relevantSemesters: number[] }>,
-    semesterNum,
-  )
+  const guidesWithSemester = allGuides.map((g) => ({
+    ...g,
+    relevantSemesters: g.relevantSemesters as number[],
+  }))
+  const filteredGuides = semesterNum
+    ? filterBySemester(guidesWithSemester, semesterNum)
+    : guidesWithSemester
   for (const guide of filteredGuides) {
     const score = scoreItem(
       { title: guide.title, description: guide.description, tags: guide.tags as string[] },
@@ -83,10 +75,13 @@ export async function GET(request: Request) {
 
   // Search contacts
   const allContacts = db.select().from(contacts).all().map((c) => mapRow(contacts, c))
-  const filteredContacts = filterBySemester(
-    allContacts as Array<typeof allContacts[0] & { relevantSemesters: number[] }>,
-    semesterNum,
-  )
+  const contactsWithSemester = allContacts.map((c) => ({
+    ...c,
+    relevantSemesters: c.relevantSemesters as number[],
+  }))
+  const filteredContacts = semesterNum
+    ? filterBySemester(contactsWithSemester, semesterNum)
+    : contactsWithSemester
   for (const contact of filteredContacts) {
     const score = scoreItem(
       {
@@ -111,10 +106,13 @@ export async function GET(request: Request) {
 
   // Search documents
   const allDocuments = db.select().from(documents).all().map((d) => mapRow(documents, d))
-  const filteredDocs = filterBySemester(
-    allDocuments as Array<typeof allDocuments[0] & { relevantSemesters: number[] }>,
-    semesterNum,
-  )
+  const docsWithSemester = allDocuments.map((d) => ({
+    ...d,
+    relevantSemesters: d.relevantSemesters as number[],
+  }))
+  const filteredDocs = semesterNum
+    ? filterBySemester(docsWithSemester, semesterNum)
+    : docsWithSemester
   for (const doc of filteredDocs) {
     const score = scoreItem(
       {

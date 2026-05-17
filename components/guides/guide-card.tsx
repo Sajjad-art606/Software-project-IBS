@@ -5,15 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import type { GuideStep } from '@/db/schema'
 import { cn } from '@/lib/utils'
-
-const categoryColors: Record<string, 'default' | 'secondary' | 'outline' | 'muted' | 'success'> = {
-  general: 'muted',
-  enrollment: 'secondary',
-  exams: 'outline',
-  internship: 'default',
-  international: 'success',
-  thesis: 'secondary',
-}
+import { GUIDE_CATEGORY_COLORS, formatSemesterBadge } from '@/lib/guides/constants'
 
 export interface GuideCardData {
   id: number
@@ -24,6 +16,7 @@ export interface GuideCardData {
   estimatedTime: string | null
   tags: string[]
   steps: GuideStep[]
+  relevantSemesters: number[]
 }
 
 export function GuideCard({ guide, className }: { guide: GuideCardData; className?: string }) {
@@ -33,9 +26,14 @@ export function GuideCard({ guide, className }: { guide: GuideCardData; classNam
         <CardContent className="flex h-full flex-col gap-3 pt-5">
           <div className="flex items-start justify-between gap-2">
             <HugeiconsIcon icon={Book02Icon} size={16} className="mt-0.5 shrink-0 text-primary" />
-            <Badge variant={categoryColors[guide.category] ?? 'muted'} className="shrink-0 text-xs">
-              {guide.category}
-            </Badge>
+            <div className="flex shrink-0 flex-col items-end gap-1">
+              <Badge variant={GUIDE_CATEGORY_COLORS[guide.category] ?? 'muted'} className="text-xs">
+                {guide.category}
+              </Badge>
+              <span className="text-[10px] text-muted-foreground">
+                {formatSemesterBadge(guide.relevantSemesters)}
+              </span>
+            </div>
           </div>
           <div className="flex-1">
             <h3 className="font-semibold leading-tight">{guide.title}</h3>
@@ -62,3 +60,4 @@ export function GuideCard({ guide, className }: { guide: GuideCardData; classNam
     </Link>
   )
 }
+

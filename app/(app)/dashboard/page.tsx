@@ -23,6 +23,8 @@ import {
 } from '@hugeicons/core-free-icons'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
+import { GUIDE_CATEGORY_COLORS } from '@/lib/guides/constants'
+import { filterBySemester } from '@/lib/guides/filter'
 
 function semesterMessage(semester: number): string {
   if (semester === 1) return 'Welcome to HFU! Get your accounts set up and find your way around campus.'
@@ -32,26 +34,6 @@ function semesterMessage(semester: number): string {
   if (semester === 5) return 'Think about your thesis topic and find a supervisor early.'
   if (semester === 6) return 'Working on your bachelor thesis? The Career Center can help with your next steps.'
   return 'Final stretch! Finish strong and prepare for your career ahead.'
-}
-
-function filterBySemester<T extends { relevantSemesters: number[] }>(
-  items: T[],
-  semester: number,
-): T[] {
-  return items.filter(
-    (item) =>
-      item.relevantSemesters.length === 0 ||
-      item.relevantSemesters.includes(semester),
-  )
-}
-
-const categoryColors: Record<string, 'default' | 'secondary' | 'outline' | 'muted' | 'success'> = {
-  general: 'muted',
-  enrollment: 'secondary',
-  exams: 'outline',
-  internship: 'default',
-  international: 'success',
-  thesis: 'secondary',
 }
 
 const platformIcons: Record<string, typeof Book02Icon> = {
@@ -168,7 +150,7 @@ export default async function DashboardPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
                       <p className="text-sm font-medium leading-tight">{guide.title}</p>
-                      <Badge variant={categoryColors[guide.category] ?? 'muted'} className="shrink-0 text-xs">
+                      <Badge variant={GUIDE_CATEGORY_COLORS[guide.category] ?? 'muted'} className="shrink-0 text-xs">
                         {guide.category}
                       </Badge>
                     </div>

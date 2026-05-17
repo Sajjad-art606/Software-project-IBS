@@ -18,6 +18,8 @@ import { Badge } from '@/components/ui/badge'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ArrowLeft01Icon, Link01Icon } from '@hugeicons/core-free-icons'
 import Link from 'next/link'
+import { GuideStepsList } from '@/components/guides/guide-steps-list'
+import { getLinkRel, getLinkTarget } from '@/lib/guides/link'
 
 const categoryLabels: Record<string, string> = {
   registration: 'City Registration',
@@ -78,42 +80,11 @@ export default async function HelpDetailPage({
 
       {/* Steps */}
       {content.steps && content.steps.length > 0 && (
-        <div className="mb-8 flex flex-col gap-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <div className="mb-8">
+          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Steps
           </h2>
-          <ol className="flex flex-col gap-4">
-            {content.steps.map((step) => (
-              <li
-                key={step.id}
-                className="flex gap-4 rounded-xl border border-border bg-card p-5"
-              >
-                <div className="flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                  {step.id}
-                </div>
-                <div className="flex flex-1 flex-col gap-2">
-                  <h3 className="text-sm font-semibold">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
-                  {step.links && step.links.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {step.links.map((link, i) => (
-                        <a
-                          key={i}
-                          href={link.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs text-primary hover:underline"
-                        >
-                          <HugeiconsIcon icon={Link01Icon} size={11} />
-                          {link.label}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ol>
+          <GuideStepsList steps={content.steps} />
         </div>
       )}
 
@@ -143,8 +114,8 @@ export default async function HelpDetailPage({
               <a
                 key={i}
                 href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={getLinkTarget(link.url)}
+                rel={getLinkRel(link.url)}
                 className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-3 text-sm text-primary transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 <HugeiconsIcon icon={Link01Icon} size={14} />

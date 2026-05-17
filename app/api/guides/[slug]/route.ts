@@ -4,6 +4,9 @@ import { guides } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { mapRow } from '@/db/utils'
 
+/**
+ * Public read API for a single Process Guide by slug (not used by the Next.js UI).
+ */
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ slug: string }> },

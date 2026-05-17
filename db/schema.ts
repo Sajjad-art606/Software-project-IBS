@@ -62,6 +62,10 @@ export const guides = sqliteTable('guides', {
   tags: jsonCol<string[]>()('tags').default([]),
   relevantSemesters: jsonCol<number[]>()('relevant_semesters').default([]),
   estimatedTime: text('estimated_time'),
+  prerequisites: jsonCol<string[]>()('prerequisites').default([]),
+  relatedGuideSlugs: jsonCol<string[]>()('related_guide_slugs').default([]),
+  relatedContactIds: jsonCol<number[]>()('related_contact_ids').default([]),
+  lastReviewedAt: text('last_reviewed_at'),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(
     sql`(strftime('%s', 'now'))`,
   ),
