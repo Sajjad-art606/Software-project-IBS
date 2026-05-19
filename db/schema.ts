@@ -103,3 +103,16 @@ export const internationalInfo = sqliteTable('international_info', {
   tags: jsonCol<string[]>()('tags').default([]),
   sortOrder: integer('sort_order').default(0),
 })
+
+export const emailVerifications = sqliteTable('email_verifications', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  email: text('email').notNull(),
+  code: text('code').notNull(),
+  semester: integer('semester').notNull(),
+  name: text('name'),
+  used: integer('used', { mode: 'boolean' }).default(false),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(
+    sql`(strftime('%s', 'now'))`,
+  ),
+})

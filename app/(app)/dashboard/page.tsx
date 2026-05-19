@@ -105,7 +105,7 @@ export default async function DashboardPage() {
       <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-primary/5 to-primary/10 p-4 sm:p-6">
         <div className="relative z-10 max-w-[calc(100%-120px)] sm:max-w-[calc(100%-160px)]">
           <h1 className="text-xl font-semibold">
-            Welcome back{session ? `, ${session.displayName ?? session.studentId}` : ''}!
+            Welcome back{session ? `, ${session.displayName ?? session.email.split('@')[0]}` : ''}!
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             <span className="font-medium text-foreground">Semester {semester}</span> - {semesterMessage(semester)}

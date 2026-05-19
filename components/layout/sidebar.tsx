@@ -170,10 +170,10 @@ export function Sidebar({ open, onClose }: SidebarProps) {
         {/* {session && (
           <div className="flex items-center gap-2.5 rounded-lg px-3 py-2">
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
-              {session.studentId.slice(0, 2).toUpperCase()}
+              {session.email.slice(0, 2).toUpperCase()}
             </div>
             <div className="min-w-0 leading-tight">
-              <p className="truncate text-xs font-semibold">{session.studentId}</p>
+              <p className="truncate text-xs font-semibold">{session.email}</p>
               <p className="truncate text-[11px] text-muted-foreground">Semester {session.semester}</p>
             </div>
           </div>

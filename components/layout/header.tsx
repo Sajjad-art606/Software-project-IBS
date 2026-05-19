@@ -92,10 +92,10 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
             <div className="flex items-center gap-2.5">
               <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
-                {session.studentId.slice(0, 2).toUpperCase()}
+                {session.email.slice(0, 2).toUpperCase()}
               </div>
               <div className="leading-tight">
-                <p className="text-xs font-semibold">ID: {session.studentId}</p>
+                <p className="text-xs font-semibold">{session.email}</p>
                 <p className="text-[11px] text-muted-foreground">
                   Semester {session.semester}
                   {session.displayName ? ` · ${session.displayName}` : ''}
@@ -126,7 +126,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
               aria-expanded={menuOpen}
             >
               <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                {session.studentId.slice(0, 2).toUpperCase()}
+                {session.email.slice(0, 2).toUpperCase()}
               </div>
               <HugeiconsIcon
                 icon={ArrowDown01Icon}
@@ -142,7 +142,7 @@ export function Header({ onMenuClick }: { onMenuClick: () => void }) {
               <div className="absolute right-0 top-full z-50 mt-1.5 w-52 rounded-xl border border-border bg-popover shadow-lg">
                 <div className="px-3 py-3">
                   <p className="text-[11px] text-muted-foreground">Signed in as</p>
-                  <p className="mt-0.5 text-sm font-semibold">{session.studentId}</p>
+                  <p className="mt-0.5 text-sm font-semibold">{session.email}</p>
                   <p className="text-xs text-muted-foreground">
                     Semester {session.semester}
                     {session.displayName ? ` · ${session.displayName}` : ''}

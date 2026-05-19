@@ -6,7 +6,7 @@ import { COOKIE_NAME, encodeSession } from './session'
 
 interface AuthContextValue {
   session: Session | null
-  login: (studentId: string, semester: number, displayName?: string) => void
+  setServerSession: (session: Session) => void
   logout: () => void
 }
 
@@ -21,23 +21,25 @@ export function AuthProvider({
 }) {
   const [session, setSession] = useState<Session | null>(initialSession)
 
-  const login = useCallback(
-    (studentId: string, semester: number, displayName?: string) => {
-      const newSession: Session = { studentId, semester, displayName }
-      document.cookie = `${COOKIE_NAME}=${encodeSession(newSession)}; path=/; SameSite=Lax`
-      setSession(newSession)
-    },
-    [],
-  )
+  const setServerSession = useCallback((newSession: Session) => {
+    // Update client cookie for consistency (server already set httpOnly one)
+    document.cookie = `${COOKIE_NAME}=${encodeSession(newSession)}; path=/; SameSite=Lax`
+    setSession(newSession)
+  }, [])
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' })
+    } catch {
+      // ignore network errors — still clear client state
+    }
     document.cookie = `${COOKIE_NAME}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
     setSession(null)
     window.location.href = '/login'
   }, [])
 
   return (
-    <AuthContext.Provider value={{ session, login, logout }}>
+    <AuthContext.Provider value={{ session, setServerSession, logout }}>
       {children}
     </AuthContext.Provider>
   )

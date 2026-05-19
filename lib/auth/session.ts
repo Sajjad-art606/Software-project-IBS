@@ -1,5 +1,5 @@
 export interface Session {
-  studentId: string
+  email: string
   semester: number
   displayName?: string
 }
@@ -14,7 +14,7 @@ export function decodeSession(raw: string): Session | null {
   try {
     const parsed = JSON.parse(Buffer.from(raw, 'base64').toString('utf-8'))
     if (
-      typeof parsed.studentId === 'string' &&
+      typeof parsed.email === 'string' &&
       typeof parsed.semester === 'number'
     ) {
       return parsed as Session

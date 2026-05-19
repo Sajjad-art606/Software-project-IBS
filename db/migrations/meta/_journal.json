@@ -8,6 +8,13 @@
       "when": 1773436154526,
       "tag": "0000_chief_stephen_strange",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1779127498323,
+      "tag": "0001_burly_the_hunter",
+      "breakpoints": true
     }
   ]
 }
