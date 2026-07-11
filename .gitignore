@@ -39,3 +39,6 @@ next-env.d.ts
 *.db
 *.db-shm
 *.db-wal
+
+# env files and all its contents
+.env*.local
