@@ -1,12 +1,13 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { documents } from '@/db/schema'
-import type { Document } from './documents-client'
-import { DocumentsClient } from './documents-client'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { documents } from "@/db/schema"
+import type { Document } from "./documents-client"
+import { DocumentsClient } from "./documents-client"
 
 export const metadata = {
-  title: 'Documents | IBS Student Hub',
-  description: 'Access forms, templates, and official documents for IBS students at HFU.',
+  title: "Documents | IBS Student Hub",
+  description:
+    "Access forms, templates, and official documents for IBS students at HFU.",
 }
 
 export default function DocumentsPage() {
@@ -25,7 +26,7 @@ export default function DocumentsPage() {
         fileType: d.fileType ?? null,
         tags: d.tags as string[],
         relevantSemesters: d.relevantSemesters as number[],
-      }),
+      })
     )
 
   return (

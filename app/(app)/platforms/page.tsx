@@ -1,7 +1,7 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { platformLinks } from '@/db/schema'
-import { HugeiconsIcon } from '@hugeicons/react'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { platformLinks } from "@/db/schema"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
   DashboardSquare01Icon,
   Mail01Icon,
@@ -9,12 +9,13 @@ import {
   Book02Icon,
   Link01Icon,
   ArrowRight01Icon,
-} from '@hugeicons/core-free-icons'
-import { Badge } from '@/components/ui/badge'
+} from "@hugeicons/core-free-icons"
+import { Badge } from "@/components/ui/badge"
 
 export const metadata = {
-  title: 'Platform Links | IBS Student Hub',
-  description: 'Quick access to Felix, MIO/QIS, OWA, sPlan, and all HFU web platforms.',
+  title: "Platform Links | IBS Student Hub",
+  description:
+    "Quick access to Felix, MIO/QIS, OWA, sPlan, and all HFU web platforms.",
 }
 
 const categoryIcons: Record<string, typeof Link01Icon> = {
@@ -25,10 +26,10 @@ const categoryIcons: Record<string, typeof Link01Icon> = {
 }
 
 const categoryLabels: Record<string, string> = {
-  academic: 'Academic',
-  communication: 'Communication',
-  scheduling: 'Scheduling',
-  learning: 'Learning',
+  academic: "Academic",
+  communication: "Communication",
+  scheduling: "Scheduling",
+  learning: "Learning",
 }
 
 export default function PlatformsPage() {
@@ -46,7 +47,7 @@ export default function PlatformsPage() {
       acc[cat].push(p)
       return acc
     },
-    {},
+    {}
   )
 
   return (
@@ -60,7 +61,7 @@ export default function PlatformsPage() {
 
       {Object.entries(grouped).map(([category, platforms]) => (
         <section key={category}>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="mb-3 text-sm font-semibold tracking-wide text-muted-foreground uppercase">
             {categoryLabels[category] ?? category}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -90,7 +91,7 @@ export default function PlatformsPage() {
                   </p>
                 </div>
                 <div className="inline-flex w-full items-center justify-center gap-1.5 rounded-4xl border border-border bg-input/30 px-3 py-1 text-sm font-medium">
-                  Open {platform.shortName ?? 'Platform'}
+                  Open {platform.shortName ?? "Platform"}
                   <HugeiconsIcon icon={ArrowRight01Icon} size={13} />
                 </div>
               </a>

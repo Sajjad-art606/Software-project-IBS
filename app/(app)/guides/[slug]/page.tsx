@@ -1,32 +1,43 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { guides } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { notFound } from 'next/navigation'
-import type { GuideStep } from '@/db/schema'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { guides } from "@/db/schema"
+import { eq } from "drizzle-orm"
+import { notFound } from "next/navigation"
+import type { GuideStep } from "@/db/schema"
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
-  const raw = db.select({ title: guides.title, description: guides.description }).from(guides).where(eq(guides.slug, slug)).get()
+  const raw = db
+    .select({ title: guides.title, description: guides.description })
+    .from(guides)
+    .where(eq(guides.slug, slug))
+    .get()
   if (!raw) return {}
   return {
     title: `${raw.title} | IBS Student Hub`,
     description: raw.description,
   }
 }
-import { Badge } from '@/components/ui/badge'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Clock01Icon, ArrowLeft01Icon } from '@hugeicons/core-free-icons'
-import Link from 'next/link'
-import { GuideStepTracker } from '@/components/guides/guide-step-tracker'
+import { Badge } from "@/components/ui/badge"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Clock01Icon, ArrowLeft01Icon } from "@hugeicons/core-free-icons"
+import Link from "next/link"
+import { GuideStepTracker } from "@/components/guides/guide-step-tracker"
 
-const categoryColors: Record<string, 'default' | 'secondary' | 'outline' | 'muted' | 'success'> = {
-  general: 'muted',
-  enrollment: 'secondary',
-  exams: 'outline',
-  internship: 'default',
-  international: 'success',
-  thesis: 'secondary',
+const categoryColors: Record<
+  string,
+  "default" | "secondary" | "outline" | "muted" | "success"
+> = {
+  general: "muted",
+  enrollment: "secondary",
+  exams: "outline",
+  internship: "default",
+  international: "success",
+  thesis: "secondary",
 }
 
 export default async function GuideDetailPage({
@@ -59,7 +70,7 @@ export default async function GuideDetailPage({
       {/* Header */}
       <div className="mb-8 flex flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge variant={categoryColors[guide.category] ?? 'muted'}>
+          <Badge variant={categoryColors[guide.category] ?? "muted"}>
             {guide.category}
           </Badge>
           {guide.estimatedTime && (

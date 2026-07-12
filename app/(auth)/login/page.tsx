@@ -1,50 +1,52 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useAuth } from '@/hooks/use-auth'
-import { Button } from '@/components/ui/button'
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { useAuth } from "@/hooks/use-auth"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Suspense } from 'react'
-import Link from 'next/link'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/select"
+import { Suspense } from "react"
+import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 // ── Validation rules ──────────────────────────────────────────────────────────
 
 function validateEmail(value: string): string {
   const v = value.trim().toLowerCase()
-  if (!v) return 'Email is required.'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Please enter a valid email address.'
-  if (!v.endsWith('@stud.hs-furtwangen.de')) {
-    return 'Only @stud.hs-furtwangen.de email addresses are allowed.'
+  if (!v) return "Email is required."
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+    return "Please enter a valid email address."
+  if (!v.endsWith("@stud.hs-furtwangen.de")) {
+    return "Only @stud.hs-furtwangen.de email addresses are allowed."
   }
-  return ''
+  return ""
 }
 
 function validateName(value: string): string {
   const v = value.trim()
-  if (!v) return '' // optional
-  if (v.length > 50) return 'Name must be at most 50 characters.'
-  if (!/^[\p{L}\s'\-]+$/u.test(v)) return 'Only letters, spaces, hyphens, and apostrophes allowed.'
-  return ''
+  if (!v) return "" // optional
+  if (v.length > 50) return "Name must be at most 50 characters."
+  if (!/^[\p{L}\s'\-]+$/u.test(v))
+    return "Only letters, spaces, hyphens, and apostrophes allowed."
+  return ""
 }
 
 function validateSemester(value: string): string {
-  if (!value) return 'Please select your current semester.'
-  return ''
+  if (!value) return "Please select your current semester."
+  return ""
 }
 
 function validateCode(value: string): string {
   const v = value.trim()
-  if (!v) return 'Code is required.'
-  if (!/^\d{6}$/.test(v)) return 'Enter the 6-digit code from your email.'
-  return ''
+  if (!v) return "Code is required."
+  if (!/^\d{6}$/.test(v)) return "Enter the 6-digit code from your email."
+  return ""
 }
 
 // ── Login form ────────────────────────────────────────────────────────────────
@@ -55,67 +57,71 @@ function LoginForm() {
   const searchParams = useSearchParams()
 
   // Step 1 fields
-  const [email, setEmail] = useState('')
-  const [name, setName] = useState('')
-  const [semester, setSemester] = useState('')
+  const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
+  const [semester, setSemester] = useState("")
 
   // Step 2 fields
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState("")
 
   const [step, setStep] = useState<1 | 2>(1)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [loading, setLoading] = useState(false)
-  const [globalError, setGlobalError] = useState('')
-  const [ resent, setResent ] = useState(false)
+  const [globalError, setGlobalError] = useState("")
+  const [resent, setResent] = useState(false)
 
   const inputBase =
-    'flex h-9 w-full rounded-lg border bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2'
+    "flex h-9 w-full rounded-lg border bg-transparent px-3 py-1 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2"
 
   function blurField(field: string) {
     setTouched((t) => ({ ...t, [field]: true }))
-    if (field === 'email') {
+    if (field === "email") {
       setErrors((e) => ({ ...e, email: validateEmail(email) }))
-    } else if (field === 'name') {
+    } else if (field === "name") {
       setErrors((e) => ({ ...e, name: validateName(name) }))
-    } else if (field === 'semester') {
+    } else if (field === "semester") {
       setErrors((e) => ({ ...e, semester: validateSemester(semester) }))
-    } else if (field === 'code') {
+    } else if (field === "code") {
       setErrors((e) => ({ ...e, code: validateCode(code) }))
     }
   }
 
   function sanitizeEmail(v: string) {
-    return v.trim().toLowerCase().replace(/\s/g, '')
+    return v.trim().toLowerCase().replace(/\s/g, "")
   }
 
   function sanitizeName(v: string) {
     // Strip control chars, allow letters, spaces, hyphens, apostrophes
-    return v.replace(/[\x00-\x1F\x7F]/g, '').slice(0, 50)
+    return v.replace(/[\x00-\x1F\x7F]/g, "").slice(0, 50)
   }
 
   function sanitizeCode(v: string) {
-    return v.replace(/\D/g, '').slice(0, 6)
+    return v.replace(/\D/g, "").slice(0, 6)
   }
 
   function handleChange(field: string, value: string) {
     let sanitized = value
-    if (field === 'email') sanitized = sanitizeEmail(value)
-    if (field === 'name') sanitized = sanitizeName(value)
-    if (field === 'code') sanitized = sanitizeCode(value)
+    if (field === "email") sanitized = sanitizeEmail(value)
+    if (field === "name") sanitized = sanitizeName(value)
+    if (field === "code") sanitized = sanitizeCode(value)
 
-    if (field === 'email') setEmail(sanitized)
-    if (field === 'name') setName(sanitized)
-    if (field === 'semester') setSemester(value)
-    if (field === 'code') setCode(sanitized)
+    if (field === "email") setEmail(sanitized)
+    if (field === "name") setName(sanitized)
+    if (field === "semester") setSemester(value)
+    if (field === "code") setCode(sanitized)
 
     if (touched[field]) {
-      if (field === 'email') setErrors((e) => ({ ...e, email: validateEmail(sanitized) }))
-      if (field === 'name') setErrors((e) => ({ ...e, name: validateName(sanitized) }))
-      if (field === 'semester') setErrors((e) => ({ ...e, semester: validateSemester(value) }))
-      if (field === 'code') setErrors((e) => ({ ...e, code: validateCode(sanitized) }))
+      if (field === "email")
+        setErrors((e) => ({ ...e, email: validateEmail(sanitized) }))
+      if (field === "name")
+        setErrors((e) => ({ ...e, name: validateName(sanitized) }))
+      if (field === "semester")
+        setErrors((e) => ({ ...e, semester: validateSemester(value) }))
+      if (field === "code")
+        setErrors((e) => ({ ...e, code: validateCode(sanitized) }))
     }
-    setGlobalError('')
+    setGlobalError("")
   }
 
   async function handleSendCode(e: React.FormEvent) {
@@ -124,18 +130,18 @@ function LoginForm() {
     const emailErr = validateEmail(email)
     const nameErr = validateName(name)
     const semErr = validateSemester(semester)
-    setErrors({ email: emailErr, name: nameErr, semester: semErr, code: '' })
+    setErrors({ email: emailErr, name: nameErr, semester: semErr, code: "" })
     setTouched({ email: true, name: true, semester: true, code: false })
 
     if (emailErr || nameErr || semErr) return
 
     setLoading(true)
-    setGlobalError('')
+    setGlobalError("")
 
     try {
-      const res = await fetch('/api/auth/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           semester: parseInt(semester, 10),
@@ -143,19 +149,21 @@ function LoginForm() {
         }),
       })
 
-      const data = await res.json().catch(() => ({}))
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setGlobalError(data.error || 'Failed to send code. Please try again.')
+        setGlobalError(data.error || "Failed to send code. Please try again.")
         setLoading(false)
         return
       }
 
       setStep(2)
-      setCode('')
-      setErrors((e) => ({ ...e, code: '' }))
+      setCode("")
+      setErrors((e) => ({ ...e, code: "" }))
       setTouched((t) => ({ ...t, code: false }))
     } catch {
-      setGlobalError('Network error. Please check your connection and try again.')
+      setGlobalError(
+        "Network error. Please check your connection and try again."
+      )
     } finally {
       setLoading(false)
     }
@@ -171,12 +179,12 @@ function LoginForm() {
     if (codeErr) return
 
     setLoading(true)
-    setGlobalError('')
+    setGlobalError("")
 
     try {
-      const res = await fetch('/api/auth/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           code: code.trim(),
@@ -185,7 +193,7 @@ function LoginForm() {
 
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
-        setGlobalError(data.error || 'Invalid or expired code.')
+        setGlobalError(data.error || "Invalid or expired code.")
         setLoading(false)
         return
       }
@@ -197,10 +205,12 @@ function LoginForm() {
         displayName: name.trim() || undefined,
       })
 
-      const from = searchParams.get('from')
-      router.push(from && from !== '/login' ? from : '/dashboard')
+      const from = searchParams.get("from")
+      router.push(from && from !== "/login" ? from : "/dashboard")
     } catch {
-      setGlobalError('Network error. Please check your connection and try again.')
+      setGlobalError(
+        "Network error. Please check your connection and try again."
+      )
     } finally {
       setLoading(false)
     }
@@ -209,12 +219,12 @@ function LoginForm() {
   async function handleResend() {
     if (resent) return
     setLoading(true)
-    setGlobalError('')
+    setGlobalError("")
 
     try {
-      const res = await fetch('/api/auth/send-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/send-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           semester: parseInt(semester, 10),
@@ -222,9 +232,9 @@ function LoginForm() {
         }),
       })
 
-      const data = await res.json().catch(() => ({}))
+      const data = (await res.json().catch(() => ({}))) as { error?: string }
       if (!res.ok) {
-        setGlobalError(data.error || 'Failed to resend code.')
+        setGlobalError(data.error || "Failed to resend code.")
         setLoading(false)
         return
       }
@@ -232,7 +242,7 @@ function LoginForm() {
       setResent(true)
       setTimeout(() => setResent(false), 30000) // allow resend after 30s
     } catch {
-      setGlobalError('Network error. Please try again.')
+      setGlobalError("Network error. Please try again.")
     } finally {
       setLoading(false)
     }
@@ -263,17 +273,19 @@ function LoginForm() {
               maxLength={120}
               placeholder="e.g. student@stud.hs-furtwangen.de"
               value={email}
-              onChange={(e) => handleChange('email', e.target.value)}
-              onBlur={() => blurField('email')}
+              onChange={(e) => handleChange("email", e.target.value)}
+              onBlur={() => blurField("email")}
               autoComplete="email"
               autoFocus
-              aria-describedby={errors.email && touched.email ? 'email-error' : undefined}
+              aria-describedby={
+                errors.email && touched.email ? "email-error" : undefined
+              }
               aria-invalid={!!(errors.email && touched.email)}
               className={cn(
                 inputBase,
                 errors.email && touched.email
-                  ? 'border-destructive focus-visible:ring-destructive/40 text-destructive'
-                  : 'border-input focus-visible:ring-ring',
+                  ? "border-destructive text-destructive focus-visible:ring-destructive/40"
+                  : "border-input focus-visible:ring-ring"
               )}
             />
             {errors.email && touched.email && (
@@ -286,7 +298,10 @@ function LoginForm() {
           {/* Name (optional) */}
           <div className="flex flex-col gap-1.5">
             <label htmlFor="name" className="text-sm font-medium">
-              Your Name <span className="text-muted-foreground font-normal">(optional)</span>
+              Your Name{" "}
+              <span className="font-normal text-muted-foreground">
+                (optional)
+              </span>
             </label>
             <input
               id="name"
@@ -294,16 +309,18 @@ function LoginForm() {
               maxLength={50}
               placeholder="e.g. Alex Müller"
               value={name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              onBlur={() => blurField('name')}
+              onChange={(e) => handleChange("name", e.target.value)}
+              onBlur={() => blurField("name")}
               autoComplete="name"
-              aria-describedby={errors.name && touched.name ? 'name-error' : undefined}
+              aria-describedby={
+                errors.name && touched.name ? "name-error" : undefined
+              }
               aria-invalid={!!(errors.name && touched.name)}
               className={cn(
                 inputBase,
                 errors.name && touched.name
-                  ? 'border-destructive focus-visible:ring-destructive/40 text-destructive'
-                  : 'border-input focus-visible:ring-ring',
+                  ? "border-destructive text-destructive focus-visible:ring-destructive/40"
+                  : "border-input focus-visible:ring-ring"
               )}
             />
             {errors.name && touched.name && (
@@ -318,17 +335,24 @@ function LoginForm() {
             <label htmlFor="semester-trigger" className="text-sm font-medium">
               Current Semester
             </label>
-            <Select value={semester} onValueChange={(val) => handleChange('semester', val ?? '')}>
+            <Select
+              value={semester}
+              onValueChange={(val) => handleChange("semester", val ?? "")}
+            >
               <SelectTrigger
                 id="semester-trigger"
                 className={cn(
-                  'w-full rounded-lg px-3 py-1 text-sm shadow-xs',
+                  "w-full rounded-lg px-3 py-1 text-sm shadow-xs",
                   errors.semester && touched.semester
-                    ? 'border-destructive focus-visible:ring-destructive/40 text-destructive'
-                    : '',
+                    ? "border-destructive text-destructive focus-visible:ring-destructive/40"
+                    : ""
                 )}
-                onBlur={() => blurField('semester')}
-                aria-describedby={errors.semester && touched.semester ? 'semester-error' : undefined}
+                onBlur={() => blurField("semester")}
+                aria-describedby={
+                  errors.semester && touched.semester
+                    ? "semester-error"
+                    : undefined
+                }
                 aria-invalid={!!(errors.semester && touched.semester)}
               >
                 <SelectValue placeholder="Select semester…" />
@@ -349,7 +373,7 @@ function LoginForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Sending code…' : 'Continue'}
+            {loading ? "Sending code…" : "Continue"}
           </Button>
         </>
       )}
@@ -357,8 +381,10 @@ function LoginForm() {
       {step === 2 && (
         <>
           <div className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm text-muted-foreground">
-            We sent a 6-digit code to{' '}
-            <span className="font-medium text-foreground">{email.trim().toLowerCase()}</span>
+            We sent a 6-digit code to{" "}
+            <span className="font-medium text-foreground">
+              {email.trim().toLowerCase()}
+            </span>
           </div>
 
           {/* Verification Code */}
@@ -373,18 +399,20 @@ function LoginForm() {
               maxLength={6}
               placeholder="123456"
               value={code}
-              onChange={(e) => handleChange('code', e.target.value)}
-              onBlur={() => blurField('code')}
+              onChange={(e) => handleChange("code", e.target.value)}
+              onBlur={() => blurField("code")}
               autoComplete="one-time-code"
               autoFocus
-              aria-describedby={errors.code && touched.code ? 'code-error' : undefined}
+              aria-describedby={
+                errors.code && touched.code ? "code-error" : undefined
+              }
               aria-invalid={!!(errors.code && touched.code)}
               className={cn(
                 inputBase,
-                'text-center tracking-[0.3em] font-mono text-lg',
+                "text-center font-mono text-lg tracking-[0.3em]",
                 errors.code && touched.code
-                  ? 'border-destructive focus-visible:ring-destructive/40 text-destructive'
-                  : 'border-input focus-visible:ring-ring',
+                  ? "border-destructive text-destructive focus-visible:ring-destructive/40"
+                  : "border-input focus-visible:ring-ring"
               )}
             />
             {errors.code && touched.code && (
@@ -395,14 +423,14 @@ function LoginForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Verifying…' : 'Sign in'}
+            {loading ? "Verifying…" : "Sign in"}
           </Button>
 
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={() => setStep(1)}
-              className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
+              className="text-xs text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
             >
               Use a different email
             </button>
@@ -410,9 +438,9 @@ function LoginForm() {
               type="button"
               onClick={handleResend}
               disabled={resent || loading}
-              className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors disabled:opacity-50 disabled:pointer-events-none"
+              className="text-xs text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
             >
-              {resent ? 'Code resent' : 'Resend code'}
+              {resent ? "Code resent" : "Resend code"}
             </button>
           </div>
         </>
@@ -427,7 +455,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-svh">
       {/* Left panel - illustration, desktop only */}
-      <div className="relative hidden lg:flex flex-1 flex-col items-center justify-center gap-6 border-r border-border bg-primary/5 p-12">
+      <div className="relative hidden flex-1 flex-col items-center justify-center gap-6 border-r border-border bg-primary/5 p-12 lg:flex">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/illustrations/online-learning.svg"
@@ -455,7 +483,7 @@ export default function LoginPage() {
       {/* Right panel - form */}
       <div className="flex flex-1 flex-col items-center justify-center gap-8 p-6">
         <div className="flex flex-col items-center gap-2 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground text-xl font-bold">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-xl font-bold text-primary-foreground">
             IBS
           </div>
           <h1 className="text-2xl font-semibold">Welcome back</h1>
@@ -473,17 +501,29 @@ export default function LoginPage() {
             Hochschule Furtwangen University · International Business Studies
           </p>
           <p className="text-xs text-muted-foreground">
-            By signing in you acknowledge our{' '}
-            <Link href="/privacy" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            By signing in you acknowledge our{" "}
+            <Link
+              href="/privacy"
+              className="underline underline-offset-2 transition-colors hover:text-foreground"
+            >
               Privacy Policy
             </Link>
-            {'. '}
-            A strictly necessary session cookie is set upon sign-in.
+            {". "}A strictly necessary session cookie is set upon sign-in.
           </p>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-foreground"
+            >
+              Privacy
+            </Link>
             <span className="opacity-40">·</span>
-            <Link href="/imprint" className="hover:text-foreground transition-colors">Imprint</Link>
+            <Link
+              href="/imprint"
+              className="transition-colors hover:text-foreground"
+            >
+              Imprint
+            </Link>
           </div>
         </div>
       </div>

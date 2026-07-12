@@ -1,11 +1,17 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Search01Icon, Mail01Icon, Call02Icon, Clock01Icon, Building03Icon } from '@hugeicons/core-free-icons'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { useDebounce } from '@/hooks/use-debounce'
+import { useState } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Search01Icon,
+  Mail01Icon,
+  Call02Icon,
+  Clock01Icon,
+  Building03Icon,
+} from "@hugeicons/core-free-icons"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { useDebounce } from "@/hooks/use-debounce"
 
 interface Contact {
   id: number
@@ -22,10 +28,10 @@ interface Contact {
 
 function ContactCard({ contact }: { contact: Contact }) {
   const initials = contact.name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
-    .join('')
+    .join("")
     .toUpperCase()
 
   return (
@@ -37,9 +43,13 @@ function ContactCard({ contact }: { contact: Contact }) {
         <div>
           <p className="font-semibold">{contact.name}</p>
           <div className="flex flex-wrap items-center gap-1.5">
-            <Badge variant="secondary" className="text-xs">{contact.role}</Badge>
+            <Badge variant="secondary" className="text-xs">
+              {contact.role}
+            </Badge>
             {contact.department && (
-              <span className="text-xs text-muted-foreground">{contact.department}</span>
+              <span className="text-xs text-muted-foreground">
+                {contact.department}
+              </span>
             )}
           </div>
         </div>
@@ -78,7 +88,10 @@ function ContactCard({ contact }: { contact: Contact }) {
         {contact.tags.length > 0 && (
           <div className="flex flex-wrap gap-1">
             {contact.tags.map((tag) => (
-              <span key={tag} className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+              <span
+                key={tag}
+                className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+              >
                 {tag}
               </span>
             ))}
@@ -90,7 +103,7 @@ function ContactCard({ contact }: { contact: Contact }) {
 }
 
 function ContactsClient({ allContacts }: { allContacts: Contact[] }) {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState("")
   const debouncedQuery = useDebounce(query, 200)
 
   const filtered = debouncedQuery.trim()
@@ -98,8 +111,11 @@ function ContactsClient({ allContacts }: { allContacts: Contact[] }) {
         (c) =>
           c.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
           c.role.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-          (c.department?.toLowerCase().includes(debouncedQuery.toLowerCase()) ?? false) ||
-          c.tags.some((t) => t.toLowerCase().includes(debouncedQuery.toLowerCase())),
+          (c.department?.toLowerCase().includes(debouncedQuery.toLowerCase()) ??
+            false) ||
+          c.tags.some((t) =>
+            t.toLowerCase().includes(debouncedQuery.toLowerCase())
+          )
       )
     : allContacts
 
@@ -109,7 +125,7 @@ function ContactsClient({ allContacts }: { allContacts: Contact[] }) {
         <HugeiconsIcon
           icon={Search01Icon}
           size={15}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
         />
         <Input
           value={query}

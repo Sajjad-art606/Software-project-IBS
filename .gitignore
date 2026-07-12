@@ -39,3 +39,7 @@ next-env.d.ts
 *.db
 *.db-shm
 *.db-wal
+
+# uploaded documents (stored locally in dev/production)
+/public/uploads/documents/*
+!/public/uploads/documents/.gitkeep

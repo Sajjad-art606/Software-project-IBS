@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import { Tabs as TabsPrimitive } from '@base-ui/react/tabs'
-import { cn } from '@/lib/utils'
+import * as React from "react"
+import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
+import { cn } from "@/lib/utils"
 
 const Tabs = TabsPrimitive.Root
 
@@ -13,13 +13,13 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'inline-flex items-center gap-0.5 rounded-lg bg-muted p-1',
-      className,
+      "inline-flex items-center gap-0.5 rounded-lg bg-muted p-1",
+      className
     )}
     {...props}
   />
 ))
-TabsList.displayName = 'TabsList'
+TabsList.displayName = "TabsList"
 
 const TabsTrigger = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Tab>,
@@ -28,13 +28,13 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Tab
     ref={ref}
     className={cn(
-      'inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground data-[active]:bg-primary data-[active]:text-primary-foreground data-[active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
-      className,
+      "inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-primary data-[active]:text-primary-foreground data-[active]:shadow-sm",
+      className
     )}
     {...props}
   />
 ))
-TabsTrigger.displayName = 'TabsTrigger'
+TabsTrigger.displayName = "TabsTrigger"
 
 const TabsContent = React.forwardRef<
   React.ComponentRef<typeof TabsPrimitive.Panel>,
@@ -42,10 +42,10 @@ const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TabsPrimitive.Panel
     ref={ref}
-    className={cn('focus-visible:outline-none', className)}
+    className={cn("focus-visible:outline-none", className)}
     {...props}
   />
 ))
-TabsContent.displayName = 'TabsContent'
+TabsContent.displayName = "TabsContent"
 
 export { Tabs, TabsList, TabsTrigger, TabsContent }

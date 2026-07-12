@@ -1,26 +1,32 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Search01Icon, File01Icon, Download01Icon, Link01Icon } from '@hugeicons/core-free-icons'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { useDebounce } from '@/hooks/use-debounce'
+import { useState } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Search01Icon,
+  File01Icon,
+  Download01Icon,
+  Link01Icon,
+} from "@hugeicons/core-free-icons"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { useDebounce } from "@/hooks/use-debounce"
+import { DOCUMENT_CATEGORIES } from "@/lib/documents"
 
 const CATEGORIES = [
-  { value: 'all', label: 'All' },
-  { value: 'forms', label: 'Forms' },
-  { value: 'templates', label: 'Templates' },
-  { value: 'regulations', label: 'Regulations' },
-  { value: 'info-sheets', label: 'Info Sheets' },
+  { value: "all", label: "All" },
+  ...DOCUMENT_CATEGORIES.map((c) => ({ value: c.value, label: c.label })),
 ]
 
-const fileTypeConfig: Record<string, { icon: typeof File01Icon; label: string }> = {
-  pdf: { icon: File01Icon, label: 'PDF' },
-  docx: { icon: File01Icon, label: 'DOCX' },
-  link: { icon: Link01Icon, label: 'Link' },
+const fileTypeConfig: Record<
+  string,
+  { icon: typeof File01Icon; label: string }
+> = {
+  pdf: { icon: File01Icon, label: "PDF" },
+  docx: { icon: File01Icon, label: "DOCX" },
+  link: { icon: Link01Icon, label: "Link" },
 }
 
 interface Document {
@@ -35,8 +41,11 @@ interface Document {
 }
 
 function DocumentCard({ doc }: { doc: Document }) {
-  const ftConfig = fileTypeConfig[doc.fileType ?? 'pdf'] ?? fileTypeConfig.pdf
-  const isExternal = doc.fileType === 'link'
+  const ftConfig = fileTypeConfig[doc.fileType ?? "pdf"] ?? fileTypeConfig.pdf
+  const isExternalLink =
+    doc.fileType === "link" || (!!doc.fileUrl && doc.fileUrl.startsWith("http"))
+  const hasFile = !!doc.fileUrl && doc.fileUrl !== "#"
+  const downloadName = hasFile ? doc.fileUrl!.split("/").pop() : undefined
 
   return (
     <div className="flex items-start gap-4 rounded-xl border border-border bg-card p-5">
@@ -46,29 +55,35 @@ function DocumentCard({ doc }: { doc: Document }) {
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div>
           <div className="flex items-start justify-between gap-2">
-            <p className="text-sm font-semibold leading-tight">{doc.title}</p>
+            <p className="text-sm leading-tight font-semibold">{doc.title}</p>
             <Badge variant="outline" className="shrink-0 text-xs">
               {ftConfig.label}
             </Badge>
           </div>
           {doc.description && (
-            <p className="mt-0.5 text-xs text-muted-foreground">{doc.description}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {doc.description}
+            </p>
           )}
         </div>
-        {doc.fileUrl && doc.fileUrl !== '#' && (
+        {hasFile && (
           <a
-            href={doc.fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={doc.fileUrl!}
+            target={isExternalLink ? "_blank" : undefined}
+            rel={isExternalLink ? "noopener noreferrer" : undefined}
+            download={isExternalLink ? undefined : downloadName}
             className="inline-flex"
           >
             <Button variant="outline" size="xs" className="gap-1.5">
-              <HugeiconsIcon icon={isExternal ? Link01Icon : Download01Icon} size={12} />
-              {isExternal ? 'Open' : 'Download'}
+              <HugeiconsIcon
+                icon={isExternalLink ? Link01Icon : Download01Icon}
+                size={12}
+              />
+              {isExternalLink ? "Open" : "Download"}
             </Button>
           </a>
         )}
-        {(!doc.fileUrl || doc.fileUrl === '#') && (
+        {(!doc.fileUrl || doc.fileUrl === "#") && (
           <p className="text-xs text-muted-foreground italic">
             Contact the Study Office to obtain this document.
           </p>
@@ -78,9 +93,13 @@ function DocumentCard({ doc }: { doc: Document }) {
   )
 }
 
-export function DocumentsClient({ allDocuments }: { allDocuments: Document[] }) {
-  const [query, setQuery] = useState('')
-  const [activeTab, setActiveTab] = useState('all')
+export function DocumentsClient({
+  allDocuments,
+}: {
+  allDocuments: Document[]
+}) {
+  const [query, setQuery] = useState("")
+  const [activeTab, setActiveTab] = useState("all")
   const debouncedQuery = useDebounce(query, 200)
 
   return (
@@ -89,7 +108,7 @@ export function DocumentsClient({ allDocuments }: { allDocuments: Document[] }) 
         <HugeiconsIcon
           icon={Search01Icon}
           size={15}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          className="absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground"
         />
         <Input
           value={query}
@@ -100,7 +119,7 @@ export function DocumentsClient({ allDocuments }: { allDocuments: Document[] }) 
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="flex flex-wrap gap-1 h-auto">
+        <TabsList className="flex h-auto flex-wrap gap-1">
           {CATEGORIES.map((cat) => (
             <TabsTrigger key={cat.value} value={cat.value}>
               {cat.label}
@@ -109,14 +128,17 @@ export function DocumentsClient({ allDocuments }: { allDocuments: Document[] }) 
         </TabsList>
 
         {CATEGORIES.map((cat) => {
-          let tabDocs = cat.value === 'all' ? allDocuments : allDocuments.filter((d) => d.category === cat.value)
+          let tabDocs =
+            cat.value === "all"
+              ? allDocuments
+              : allDocuments.filter((d) => d.category === cat.value)
           if (debouncedQuery.trim()) {
             const q = debouncedQuery.toLowerCase()
             tabDocs = tabDocs.filter(
               (d) =>
                 d.title.toLowerCase().includes(q) ||
                 (d.description?.toLowerCase().includes(q) ?? false) ||
-                d.tags.some((t) => t.toLowerCase().includes(q)),
+                d.tags.some((t) => t.toLowerCase().includes(q))
             )
           }
           return (
