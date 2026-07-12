@@ -854,37 +854,6 @@ async function seed() {
   db.insert(documents)
     .values([
       {
-        title: "Internship Registration Form",
-        description:
-          "Official form to register your practical semester internship with the university.",
-        fileUrl:
-          "documents/IBS_Internship_Semester_Checklist_Procedure_Notes_101024.pdf",
-        category: "forms",
-        fileType: "pdf",
-        tags: ["internship", "practical-semester", "registration"],
-        relevantSemesters: [3, 4],
-      },
-      {
-        title: "Internship Report Template",
-        description:
-          "Template for writing your internship report (Praktikumsbericht) after completing your practical semester.",
-        fileUrl: "#",
-        category: "templates",
-        fileType: "docx",
-        tags: ["internship", "report", "template"],
-        relevantSemesters: [4],
-      },
-      {
-        title: "Exam Registration & Deadlines Overview",
-        description:
-          "Overview of exam registration and deregistration deadlines for the current semester.",
-        fileUrl: "#",
-        category: "info-sheets",
-        fileType: "pdf",
-        tags: ["exams", "deadlines", "registration"],
-        relevantSemesters: [],
-      },
-      {
         title: "Student Enrollment Certificate",
         description:
           "Download your official enrollment certificate (Immatrikulationsbescheinigung) from MIO/QIS.",
@@ -894,16 +863,7 @@ async function seed() {
         tags: ["enrollment", "certificate", "proof"],
         relevantSemesters: [],
       },
-      {
-        title: "Bachelor Thesis Registration Form",
-        description:
-          "Official form to register your bachelor thesis topic and examiners with the Exam Office.",
-        fileUrl: "documents/Thesis_Titelblatt_Bachelor.docx",
-        category: "forms",
-        fileType: "docx",
-        tags: ["thesis", "registration", "graduation"],
-        relevantSemesters: [5, 6, 7],
-      },
+
       {
         title: "Academic Regulations (SPO)",
         description:
@@ -925,16 +885,7 @@ async function seed() {
         tags: ["housing", "dormitory", "accommodation", "studierendenwerk"],
         relevantSemesters: [1],
       },
-      {
-        title: "Health Insurance Certificate Template",
-        description:
-          "Template for the health insurance certificate required for enrollment at HFU.",
-        fileUrl: "#",
-        category: "templates",
-        fileType: "pdf",
-        tags: ["health-insurance", "insurance", "international", "enrollment"],
-        relevantSemesters: [1],
-      },
+
       {
         title: "Student Exmatriculation document",
         description: "Official document for deregistering from the university.",
