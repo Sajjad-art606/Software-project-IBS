@@ -319,10 +319,10 @@ async function seed() {
       slug: "enrollment-and-re-enrollment",
       title: "Enrollment & Re-enrollment (Rückmeldung)",
       description:
-        "How to stay enrolled each semester by checking deadlines, paying the contribution, and confirming your enrollment status.",
+        "How to stay enrolled in the early semesters by checking deadlines, paying the contribution, and confirming your enrollment status.",
       category: "enrollment",
       estimatedTime: "30 minutes",
-      relevantSemesters: [1, 2, 3, 4, 5, 6],
+      relevantSemesters: [1, 2, 3],
       tags: ["enrollment", "re-enrollment", "semester-fee", "rückmeldung"],
       steps: [
         {
@@ -358,10 +358,10 @@ async function seed() {
       slug: "exam-registration",
       title: "Registering for Exams",
       description:
-        "How to register and deregister for examinations during the official examination registration period.",
+        "How to register and deregister for examinations during the official examination registration period in the relevant exam semesters.",
       category: "exams",
       estimatedTime: "20 minutes",
-      relevantSemesters: [1, 2, 3, 4, 5, 6, 7],
+      relevantSemesters: [1, 2, 3, 5, 6],
       tags: ["exams", "registration", "mio", "qis", "deregistration"],
       steps: [
         {
@@ -699,7 +699,7 @@ async function seed() {
       slug: "using-moodle-lconline",
       title: "Using LCOnline (Moodle)",
       description:
-        "How to use LCOnline during Semester 1 to 3 for course rooms, materials, announcements, and timetable updates.",
+        "How to use LCOnline during the early semesters for course rooms, materials, announcements, and timetable updates.",
       category: "general",
       estimatedTime: "45 minutes",
       relevantSemesters: [1, 2, 3],
