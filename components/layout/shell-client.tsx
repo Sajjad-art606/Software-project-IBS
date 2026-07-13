@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { useState, useCallback } from 'react'
-import { Sidebar } from './sidebar'
-import { Header } from './header'
-import { Footer } from './footer'
+import { useState, useCallback } from "react"
+import { Sidebar } from "./sidebar"
+import { Header } from "./header"
+import { Footer } from "./footer"
 
 export function ShellClient({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)

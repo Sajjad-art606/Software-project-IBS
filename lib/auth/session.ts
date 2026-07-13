@@ -4,18 +4,18 @@ export interface Session {
   displayName?: string
 }
 
-export const COOKIE_NAME = 'ibs-session'
+export const COOKIE_NAME = "ibs-session"
 
 export function encodeSession(session: Session): string {
-  return Buffer.from(JSON.stringify(session)).toString('base64')
+  return Buffer.from(JSON.stringify(session)).toString("base64")
 }
 
 export function decodeSession(raw: string): Session | null {
   try {
-    const parsed = JSON.parse(Buffer.from(raw, 'base64').toString('utf-8'))
+    const parsed = JSON.parse(Buffer.from(raw, "base64").toString("utf-8"))
     if (
-      typeof parsed.email === 'string' &&
-      typeof parsed.semester === 'number'
+      typeof parsed.email === "string" &&
+      typeof parsed.semester === "number"
     ) {
       return parsed as Session
     }

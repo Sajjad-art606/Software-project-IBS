@@ -7,10 +7,11 @@ import { cookies } from 'next/headers'
 import { COOKIE_NAME, decodeSession } from '@/lib/auth/session'
 
 export const metadata = {
-  title: 'Process Guides | IBS Student Hub',
-  description: 'Step-by-step guides for enrollment, exams, internship, thesis, and more.',
+  title: "Process Guides | IBS Student Hub",
+  description:
+    "Step-by-step guides for enrollment, exams, internship, thesis, and more.",
 }
-import { GuidesClient } from './guides-client'
+import { GuidesClient } from "./guides-client"
 
 export default async function GuidesPage() {
   const cookieStore = await cookies()
@@ -39,7 +40,7 @@ export default async function GuidesPage() {
         estimatedTime: g.estimatedTime ?? null,
         tags: g.tags as string[],
         steps: g.steps as GuideStep[],
-      }),
+      })
     )
 
   return (
@@ -47,7 +48,8 @@ export default async function GuidesPage() {
       <div>
         <h1 className="text-xl font-semibold">Process Guides</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Step-by-step guides for common academic processes and administrative tasks.
+          Step-by-step guides for common academic processes and administrative
+          tasks.
         </p>
       </div>
       <GuidesClient guides={allGuides} />
