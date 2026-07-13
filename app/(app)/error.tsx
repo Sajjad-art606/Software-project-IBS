@@ -1,6 +1,6 @@
-'use client'
+"use client"
 
-import Link from 'next/link'
+import Link from "next/link"
 
 export default function AppError({
   error,
@@ -13,7 +13,7 @@ export default function AppError({
     <div className="flex flex-col items-center justify-center gap-4 p-12 text-center">
       <h1 className="text-xl font-semibold">Something went wrong</h1>
       <p className="max-w-sm text-sm text-muted-foreground">
-        {error.message || 'An unexpected error occurred. Please try again.'}
+        {error.message || "An unexpected error occurred. Please try again."}
       </p>
       <div className="flex gap-3">
         <button

@@ -1,30 +1,68 @@
-'use client'
+"use client"
 
-import { useState, useEffect } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { CheckmarkCircle01Icon, Link01Icon } from '@hugeicons/core-free-icons'
-import { Progress } from '@/components/ui/progress'
-import { buttonVariants } from '@/components/ui/button'
-import type { GuideStep } from '@/db/schema'
+import { useCallback, useSyncExternalStore } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { CheckmarkCircle01Icon, Link01Icon } from "@hugeicons/core-free-icons"
+import { Progress } from "@/components/ui/progress"
+import { buttonVariants } from "@/components/ui/button"
+import type { GuideStep } from "@/db/schema"
 
-export function GuideStepTracker({ steps, slug }: { steps: GuideStep[]; slug: string }) {
-  const storageKey = `guide-progress-${slug}`
+const PROGRESS_EVENT = "guide-progress"
+const EMPTY_SNAPSHOT = "[]"
 
-  const [checked, setChecked] = useState<Set<number>>(() => new Set())
+function normalizeSnapshot(raw: string | null): string {
+  if (!raw) return EMPTY_SNAPSHOT
+  try {
+    const ids = [...new Set(JSON.parse(raw) as number[])].sort((a, b) => a - b)
+    return JSON.stringify(ids)
+  } catch {
+    return EMPTY_SNAPSHOT
+  }
+}
 
-  // Hydrate from localStorage after mount (avoids SSR mismatch)
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(storageKey)
-      if (stored) setChecked(new Set(JSON.parse(stored) as number[]))
-    } catch {
-      // ignore
+function readCheckedSnapshot(storageKey: string): string {
+  try {
+    return normalizeSnapshot(localStorage.getItem(storageKey))
+  } catch {
+    return EMPTY_SNAPSHOT
+  }
+}
+
+function parseCheckedSnapshot(snapshot: string): Set<number> {
+  try {
+    return new Set(JSON.parse(snapshot) as number[])
+  } catch {
+    return new Set()
+  }
+}
+
+function useGuideProgress(storageKey: string) {
+  const subscribe = useCallback((onStoreChange: () => void) => {
+    const handler = () => onStoreChange()
+    window.addEventListener(PROGRESS_EVENT, handler)
+    window.addEventListener("storage", handler)
+    return () => {
+      window.removeEventListener(PROGRESS_EVENT, handler)
+      window.removeEventListener("storage", handler)
     }
-  }, [storageKey])
+  }, [])
 
-  function toggle(id: number) {
-    setChecked((prev) => {
-      const next = new Set(prev)
+  const getSnapshot = useCallback(
+    () => readCheckedSnapshot(storageKey),
+    [storageKey]
+  )
+  const getServerSnapshot = useCallback(() => EMPTY_SNAPSHOT, [])
+
+  const snapshot = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  )
+  const checked = parseCheckedSnapshot(snapshot)
+
+  const toggle = useCallback(
+    (id: number) => {
+      const next = parseCheckedSnapshot(readCheckedSnapshot(storageKey))
       if (next.has(id)) {
         next.delete(id)
       } else {
@@ -32,14 +70,28 @@ export function GuideStepTracker({ steps, slug }: { steps: GuideStep[]; slug: st
       }
       try {
         localStorage.setItem(storageKey, JSON.stringify([...next]))
+        window.dispatchEvent(new Event(PROGRESS_EVENT))
       } catch {
         // ignore
       }
-      return next
-    })
-  }
+    },
+    [storageKey]
+  )
 
-  const progress = steps.length > 0 ? Math.round((checked.size / steps.length) * 100) : 0
+  return { checked, toggle }
+}
+
+export function GuideStepTracker({
+  steps,
+  slug,
+}: {
+  steps: GuideStep[]
+  slug: string
+}) {
+  const storageKey = `guide-progress-${slug}`
+  const { checked, toggle } = useGuideProgress(storageKey)
+  const progress =
+    steps.length > 0 ? Math.round((checked.size / steps.length) * 100) : 0
 
   return (
     <div className="flex flex-col gap-6">
@@ -72,7 +124,7 @@ export function GuideStepTracker({ steps, slug }: { steps: GuideStep[]; slug: st
               <button
                 onClick={() => toggle(step.id)}
                 className="shrink-0 transition-colors"
-                aria-label={isDone ? 'Mark as incomplete' : 'Mark as complete'}
+                aria-label={isDone ? "Mark as incomplete" : "Mark as complete"}
               >
                 {isDone ? (
                   <HugeiconsIcon
@@ -90,16 +142,20 @@ export function GuideStepTracker({ steps, slug }: { steps: GuideStep[]; slug: st
               <div className="flex flex-1 flex-col gap-3">
                 <div>
                   <h3
-                    className={`text-sm font-semibold leading-tight ${isDone ? 'line-through text-muted-foreground' : ''}`}
+                    className={`text-sm leading-tight font-semibold ${isDone ? "text-muted-foreground line-through" : ""}`}
                   >
                     {step.title}
                   </h3>
-                  <p className="mt-1 text-sm text-muted-foreground">{step.description}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {step.description}
+                  </p>
                 </div>
 
                 {step.tips && step.tips.length > 0 && (
                   <div className="rounded-lg bg-primary/5 p-3">
-                    <p className="mb-1 text-xs font-semibold text-primary">Tips</p>
+                    <p className="mb-1 text-xs font-semibold text-primary">
+                      Tips
+                    </p>
                     <ul className="flex flex-col gap-1">
                       {step.tips.map((tip, i) => (
                         <li key={i} className="text-xs text-muted-foreground">
@@ -118,7 +174,10 @@ export function GuideStepTracker({ steps, slug }: { steps: GuideStep[]; slug: st
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={buttonVariants({ variant: 'outline', size: 'xs' }) + ' gap-1.5'}
+                        className={
+                          buttonVariants({ variant: "outline", size: "xs" }) +
+                          " gap-1.5"
+                        }
                       >
                         <HugeiconsIcon icon={Link01Icon} size={12} />
                         {link.label}

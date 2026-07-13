@@ -1,14 +1,14 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { internationalInfo } from '@/db/schema'
-import type { HelpContent } from '@/db/schema'
-import Link from 'next/link'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { internationalInfo } from "@/db/schema"
+import Link from "next/link"
 
 export const metadata = {
-  title: 'International Help | IBS Student Hub',
-  description: 'Practical guides for city registration, banking, housing, insurance, and visa as an international student.',
+  title: "International Help | IBS Student Hub",
+  description:
+    "Practical guides for city registration, banking, housing, insurance, and visa as an international student.",
 }
-import { HugeiconsIcon } from '@hugeicons/react'
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Building01Icon,
   BankIcon,
@@ -18,8 +18,8 @@ import {
   CheckmarkSquare04Icon,
   GlobeIcon,
   ArrowRight01Icon,
-} from '@hugeicons/core-free-icons'
-import { Badge } from '@/components/ui/badge'
+} from "@hugeicons/core-free-icons"
+import { Badge } from "@/components/ui/badge"
 
 const categoryIcons: Record<string, typeof GlobeIcon> = {
   registration: Building01Icon,
@@ -30,22 +30,25 @@ const categoryIcons: Record<string, typeof GlobeIcon> = {
   general: CheckmarkSquare04Icon,
 }
 
-const categoryColors: Record<string, 'default' | 'secondary' | 'outline' | 'muted' | 'success'> = {
-  registration: 'default',
-  banking: 'secondary',
-  housing: 'success',
-  insurance: 'muted',
-  visa: 'outline',
-  general: 'muted',
+const categoryColors: Record<
+  string,
+  "default" | "secondary" | "outline" | "muted" | "success"
+> = {
+  registration: "default",
+  banking: "secondary",
+  housing: "success",
+  insurance: "muted",
+  visa: "outline",
+  general: "muted",
 }
 
 const categoryLabels: Record<string, string> = {
-  registration: 'City Registration',
-  banking: 'Banking',
-  housing: 'Housing',
-  insurance: 'Insurance',
-  visa: 'Visa & Permits',
-  general: 'General',
+  registration: "City Registration",
+  banking: "Banking",
+  housing: "Housing",
+  insurance: "Insurance",
+  visa: "Visa & Permits",
+  general: "General",
 }
 
 export default function HelpPage() {
@@ -61,7 +64,8 @@ export default function HelpPage() {
       <div>
         <h1 className="text-xl font-semibold">International Student Help</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Practical guides for getting settled in Germany as an international student.
+          Practical guides for getting settled in Germany as an international
+          student.
         </p>
       </div>
 
@@ -71,7 +75,7 @@ export default function HelpPage() {
           const steps = info.content.steps?.length ?? 0
           const tips = info.content.tips?.length ?? 0
           const count = steps > 0 ? steps : tips
-          const countLabel = steps > 0 ? 'steps' : 'tips'
+          const countLabel = steps > 0 ? "steps" : "tips"
 
           return (
             <Link
@@ -83,7 +87,10 @@ export default function HelpPage() {
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <HugeiconsIcon icon={icon} size={20} />
                 </div>
-                <Badge variant={categoryColors[info.category] ?? 'muted'} className="text-xs">
+                <Badge
+                  variant={categoryColors[info.category] ?? "muted"}
+                  className="text-xs"
+                >
                   {categoryLabels[info.category] ?? info.category}
                 </Badge>
               </div>
@@ -94,7 +101,7 @@ export default function HelpPage() {
                 </p>
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{count > 0 ? `${count} ${countLabel}` : 'overview'}</span>
+                <span>{count > 0 ? `${count} ${countLabel}` : "overview"}</span>
                 <div className="flex items-center gap-1 text-primary">
                   Read guide <HugeiconsIcon icon={ArrowRight01Icon} size={12} />
                 </div>

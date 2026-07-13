@@ -1,0 +1,20 @@
+import type { Session } from "./session"
+
+export function getAdminEmails(): string[] {
+  const raw = process.env.ADMIN_EMAILS ?? ""
+  return raw
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean)
+}
+
+export function isAdminEmail(email: string): boolean {
+  const admins = getAdminEmails()
+  if (admins.length === 0) return false
+  return admins.includes(email.trim().toLowerCase())
+}
+
+export function isAdmin(session: Session | null): boolean {
+  if (!session?.email) return false
+  return isAdminEmail(session.email)
+}

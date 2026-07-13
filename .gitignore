@@ -40,5 +40,6 @@ next-env.d.ts
 *.db-shm
 *.db-wal
 
-# env files and all its contents
-.env*.local
+# uploaded documents (stored locally in dev/production)
+/public/uploads/documents/*
+!/public/uploads/documents/.gitkeep

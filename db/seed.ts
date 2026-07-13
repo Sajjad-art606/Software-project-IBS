@@ -8,6 +8,7 @@ import {
   internationalInfo,
 } from "./schema"
 import type { GuideStep, HelpContent } from "./schema"
+import { professorContacts } from "./professor-contacts"
 import path from "path"
 
 const DB_PATH = process.env.DB_PATH ?? path.join(process.cwd(), "ibs-hub.db")
@@ -253,6 +254,7 @@ async function seed() {
         ],
         relevantSemesters: [1],
       },
+      ...professorContacts,
     ])
     .run()
 
@@ -771,13 +773,12 @@ async function seed() {
         tags: ["enrollment", "certificate", "proof"],
         relevantSemesters: [],
       },
-
       {
         title: "Academic Regulations (SPO)",
         description:
           "The official study and examination regulations (Studien- und Prüfungsordnung) for the IBS program.",
         fileUrl:
-          "documents/ExaminationRulesAboutTheDurationOfInternship_251028_115338.pdf",
+          "/documents/ExaminationRulesAboutTheDurationOfInternship_251028_115338.pdf",
         category: "regulations",
         fileType: "pdf",
         tags: ["regulations", "spo", "rules", "exams", "modules"],
@@ -793,11 +794,10 @@ async function seed() {
         tags: ["housing", "dormitory", "accommodation", "studierendenwerk"],
         relevantSemesters: [1],
       },
-
       {
         title: "Student Exmatriculation document",
         description: "Official document for deregistering from the university.",
-        fileUrl: "documents/Antrag_auf_Exmatrikulation_englisch.pdf",
+        fileUrl: "/documents/Antrag_auf_Exmatrikulation_englisch.pdf",
         category: "forms",
         fileType: "pdf",
         tags: ["exmatriculation", "deregistration", "withdrawal"],
@@ -807,7 +807,7 @@ async function seed() {
         title: "German language course flyer",
         description:
           "Information about German language courses offered for international students.",
-        fileUrl: "documents/SLC_Flyer_SoSe2026_de_en.pdf",
+        fileUrl: "/documents/SLC_Flyer_SoSe2026_de_en.pdf",
         category: "info-sheets",
         fileType: "pdf",
         tags: [
@@ -823,7 +823,7 @@ async function seed() {
         description:
           "A checklist to help you prepare for and complete your practical semester internship successfully.",
         fileUrl:
-          "documents/IBS_Internship_Semester_Checklist_Procedure_Notes_101024.pdf",
+          "/documents/IBS_Internship_Semester_Checklist_Procedure_Notes_101024.pdf",
         category: "checklists",
         fileType: "pdf",
         tags: ["international", "checklist", "guides", "steps"],
@@ -833,7 +833,7 @@ async function seed() {
         title: "Elective registration form",
         description:
           "Form to register for elective modules at the start of each semester.",
-        fileUrl: "documents/IBS_Electives_Registration_Form (1).pdf",
+        fileUrl: "/documents/IBS_Electives_Registration_Form (1).pdf",
         category: "forms",
         fileType: "pdf",
         tags: ["electives", "modules", "registration", "course-selection"],
@@ -843,7 +843,7 @@ async function seed() {
         title: "Credit Transfer form",
         description:
           "Form to request recognition of prior learning or transfer of credits from other institutions.",
-        fileUrl: "documents/IBS_CREDIT_Transfer_Form.pdf",
+        fileUrl: "/documents/IBS_CREDIT_Transfer_Form.pdf",
         category: "forms",
         fileType: "pdf",
         tags: [
@@ -859,8 +859,8 @@ async function seed() {
         title: "Professors profile list",
         description:
           "List of professors in the IBS program with their contact information and research areas.",
-        fileUrl: "documents/ProfessorInnen_Profil.pdf",
-        category: "info-sheet",
+        fileUrl: "/documents/ProfessorInnen_Profil.pdf",
+        category: "info-sheets",
         fileType: "pdf",
         tags: ["professors", "faculty", "research", "contacts"],
         relevantSemesters: [4, 5, 6, 7],
@@ -869,7 +869,7 @@ async function seed() {
         title: "Thesis templates",
         description:
           "Templates for formatting your bachelor thesis according to HFU guidelines.",
-        fileUrl: "documents/Thesis_Titelblatt_BCM.doc",
+        fileUrl: "/documents/Thesis_Titelblatt_BCM.doc",
         category: "templates",
         fileType: "docx",
         tags: ["thesis", "templates", "formating", "bachelors-thesis"],
@@ -880,7 +880,7 @@ async function seed() {
         description:
           "Form to request an extension for your thesis submission deadline.",
         fileUrl:
-          "documents/Antrag_auf_Verlaengerung_einer_Thesis__englisch_new_1.pdf",
+          "/documents/Antrag_auf_Verlaengerung_einer_Thesis__englisch_new_1.pdf",
         category: "forms",
         fileType: "pdf",
         tags: ["thesis", "extension", "deadline", "request"],
@@ -890,7 +890,7 @@ async function seed() {
         title: "IBS curriculum overview",
         description:
           "Overview of the IBS program curriculum, including modules, ECTS credits, and semester structure.",
-        fileUrl: "documents/IBS CUrriculum.pdf",
+        fileUrl: "/documents/IBS CUrriculum.pdf",
         fileType: "pdf",
         category: "info-sheets",
         tags: [
@@ -1257,9 +1257,9 @@ async function seed() {
 
   console.log("✅ Database seeded successfully!")
   console.log("   Platform links:", 5)
-  console.log("   Contacts:", 12)
+  console.log("   Contacts:", 12 + professorContacts.length)
   console.log("   Guides:", guideData.length)
-  console.log("   Documents:", 8)
+  console.log("   Documents:", 12)
   console.log("   International info topics:", helpData.length)
   sqlite.close()
 }

@@ -1,31 +1,42 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { internationalInfo } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { notFound } from 'next/navigation'
-import type { HelpContent } from '@/db/schema'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { internationalInfo } from "@/db/schema"
+import { eq } from "drizzle-orm"
+import { notFound } from "next/navigation"
+import type { HelpContent } from "@/db/schema"
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
-  const raw = db.select({ title: internationalInfo.title, description: internationalInfo.description }).from(internationalInfo).where(eq(internationalInfo.slug, slug)).get()
+  const raw = db
+    .select({
+      title: internationalInfo.title,
+      description: internationalInfo.description,
+    })
+    .from(internationalInfo)
+    .where(eq(internationalInfo.slug, slug))
+    .get()
   if (!raw) return {}
   return {
     title: `${raw.title} | IBS Student Hub`,
     description: raw.description,
   }
 }
-import { Badge } from '@/components/ui/badge'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { ArrowLeft01Icon, Link01Icon } from '@hugeicons/core-free-icons'
-import Link from 'next/link'
+import { Badge } from "@/components/ui/badge"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ArrowLeft01Icon, Link01Icon } from "@hugeicons/core-free-icons"
+import Link from "next/link"
 
 const categoryLabels: Record<string, string> = {
-  registration: 'City Registration',
-  banking: 'Banking',
-  housing: 'Housing',
-  insurance: 'Insurance',
-  visa: 'Visa & Permits',
-  general: 'General',
+  registration: "City Registration",
+  banking: "Banking",
+  housing: "Housing",
+  insurance: "Insurance",
+  visa: "Visa & Permits",
+  general: "General",
 }
 
 export default async function HelpDetailPage({
@@ -34,7 +45,11 @@ export default async function HelpDetailPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const _rawInfo = db.select().from(internationalInfo).where(eq(internationalInfo.slug, slug)).get()
+  const _rawInfo = db
+    .select()
+    .from(internationalInfo)
+    .where(eq(internationalInfo.slug, slug))
+    .get()
   const info = _rawInfo ? mapRow(internationalInfo, _rawInfo) : undefined
 
   if (!info) {
@@ -79,7 +94,7 @@ export default async function HelpDetailPage({
       {/* Steps */}
       {content.steps && content.steps.length > 0 && (
         <div className="mb-8 flex flex-col gap-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
             Steps
           </h2>
           <ol className="flex flex-col gap-4">
@@ -93,7 +108,9 @@ export default async function HelpDetailPage({
                 </div>
                 <div className="flex flex-1 flex-col gap-2">
                   <h3 className="text-sm font-semibold">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {step.description}
+                  </p>
                   {step.links && step.links.length > 0 && (
                     <div className="flex flex-wrap gap-2 pt-1">
                       {step.links.map((link, i) => (
@@ -135,7 +152,7 @@ export default async function HelpDetailPage({
       {/* Additional links */}
       {content.links && content.links.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          <h2 className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">
             Useful Links
           </h2>
           <div className="flex flex-col gap-2">

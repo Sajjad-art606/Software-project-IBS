@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/db'
-import { emailVerifications } from '@/db/schema'
-import { sendEmail } from '@/lib/email'
-import { eq, and, gt } from 'drizzle-orm'
+import { NextRequest, NextResponse } from "next/server"
+import { db } from "@/db"
+import { emailVerifications } from "@/db/schema"
+import { sendEmail } from "@/lib/email"
+import { eq, and } from "drizzle-orm"
 
 function generateCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString()
@@ -10,10 +10,11 @@ function generateCode(): string {
 
 function validateEmail(email: string): string | null {
   const v = email.trim().toLowerCase()
-  if (!v) return 'Email is required.'
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'Please enter a valid email address.'
-  if (!v.endsWith('@stud.hs-furtwangen.de')) {
-    return 'Only @stud.hs-furtwangen.de email addresses are allowed.'
+  if (!v) return "Email is required."
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+    return "Please enter a valid email address."
+  if (!v.endsWith("@stud.hs-furtwangen.de")) {
+    return "Only @stud.hs-furtwangen.de email addresses are allowed."
   }
   return null
 }
@@ -39,24 +40,30 @@ function recordAttempt(email: string): void {
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json().catch(() => ({}))) as Record<string, unknown>
-    const emailRaw = String(body.email ?? '')
+    const emailRaw = String(body.email ?? "")
     const semester = Number(body.semester ?? 0)
-    const name = String(body.name ?? '').trim() || null
+    const name = String(body.name ?? "").trim() || null
 
     const emailErr = validateEmail(emailRaw)
     if (emailErr) {
       return NextResponse.json({ error: emailErr }, { status: 400 })
     }
     if (!semester || semester < 1 || semester > 7) {
-      return NextResponse.json({ error: 'Please select a valid semester.' }, { status: 400 })
+      return NextResponse.json(
+        { error: "Please select a valid semester." },
+        { status: 400 }
+      )
     }
 
     const email = emailRaw.trim().toLowerCase()
 
     if (isRateLimited(email)) {
       return NextResponse.json(
-        { error: 'Too many attempts. Please wait 10 minutes before trying again.' },
-        { status: 429 },
+        {
+          error:
+            "Too many attempts. Please wait 10 minutes before trying again.",
+        },
+        { status: 429 }
       )
     }
 
@@ -69,7 +76,12 @@ export async function POST(req: NextRequest) {
     await db
       .update(emailVerifications)
       .set({ used: true })
-      .where(and(eq(emailVerifications.email, email), eq(emailVerifications.used, false)))
+      .where(
+        and(
+          eq(emailVerifications.email, email),
+          eq(emailVerifications.used, false)
+        )
+      )
 
     // Store new verification
     await db.insert(emailVerifications).values({
@@ -80,10 +92,9 @@ export async function POST(req: NextRequest) {
       expiresAt,
     })
 
-    // Send email via Cloudflare
     await sendEmail({
       to: email,
-      subject: 'Your IBS Student Hub Login Code',
+      subject: "Your IBS Student Hub Login Code",
       textBody: `Hello,
 
 Your login code for IBS Student Hub is: ${code}
@@ -103,8 +114,8 @@ If you did not request this code, you can safely ignore this email.
 
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error('send-code error:', err)
-    const message = err instanceof Error ? err.message : 'Something went wrong.'
+    console.error("send-code error:", err)
+    const message = err instanceof Error ? err.message : "Something went wrong."
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

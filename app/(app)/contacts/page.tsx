@@ -1,12 +1,12 @@
-import { db } from '@/db'
-import { mapRow } from '@/db/utils'
-import { contacts } from '@/db/schema'
-import type { Contact } from './contacts-client'
-import { ContactsClient } from './contacts-client'
+import { db } from "@/db"
+import { mapRow } from "@/db/utils"
+import { contacts } from "@/db/schema"
+import type { Contact } from "./contacts-client"
+import { ContactsClient } from "./contacts-client"
 
 export const metadata = {
-  title: 'Contacts | IBS Student Hub',
-  description: 'Find the right contact person for your academic needs at HFU.',
+  title: "Contacts | IBS Student Hub",
+  description: "Find the right contact person for your academic needs at HFU.",
 }
 
 export default function ContactsPage() {
@@ -27,7 +27,7 @@ export default function ContactsPage() {
         officeHours: c.officeHours ?? null,
         tags: c.tags as string[],
         relevantSemesters: c.relevantSemesters as number[],
-      }),
+      })
     )
 
   return (
