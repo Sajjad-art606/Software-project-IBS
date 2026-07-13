@@ -23,6 +23,7 @@ import {
   Search01Icon,
 } from "@hugeicons/core-free-icons"
 import { Badge } from "@/components/ui/badge"
+import { SemesterSwitcher } from "@/components/dashboard/semester-switcher"
 
 function semesterMessage(semester: number): string {
   if (semester === 1)
@@ -107,11 +108,23 @@ const quickLinks = [
   },
 ]
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ semester?: string | string[] | undefined }>
+}) {
   const cookieStore = await cookies()
   const raw = cookieStore.get(COOKIE_NAME)?.value ?? null
   const session = raw ? decodeSession(raw) : null
-  const semester = session?.semester ?? 1
+  const resolvedSearchParams = await searchParams
+  const requestedSemester = resolvedSearchParams.semester
+  const parsedSemester = Array.isArray(requestedSemester)
+    ? Number.parseInt(requestedSemester[0] ?? "", 10)
+    : Number.parseInt(requestedSemester ?? "", 10)
+  const semester =
+    Number.isInteger(parsedSemester) && parsedSemester >= 1 && parsedSemester <= 7
+      ? parsedSemester
+      : session?.semester ?? 1
 
   const allGuides = db
     .select()
@@ -153,20 +166,23 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-8 p-4 sm:p-6">
       {/* Welcome banner */}
       <div className="relative overflow-hidden rounded-xl border border-border bg-gradient-to-br from-primary/5 to-primary/10 p-4 sm:p-6">
-        <div className="relative z-10 max-w-[calc(100%-120px)] sm:max-w-[calc(100%-160px)]">
-          <h1 className="text-xl font-semibold">
-            Welcome back
-            {session
-              ? `, ${session.displayName ?? session.email.split("@")[0]}`
-              : ""}
-            !
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">
-              Semester {semester}
-            </span>{" "}
-            - {semesterMessage(semester)}
-          </p>
+        <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-[calc(100%-120px)] sm:max-w-[calc(100%-160px)]">
+            <h1 className="text-xl font-semibold">
+              Welcome back
+              {session
+                ? `, ${session.displayName ?? session.email.split("@")[0]}`
+                : ""}
+              !
+            </h1>
+            <p className="mt-2 text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">
+                Semester {semester}
+              </span>{" "}
+              - {semesterMessage(semester)}
+            </p>
+          </div>
+          <SemesterSwitcher currentSemester={semester} />
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

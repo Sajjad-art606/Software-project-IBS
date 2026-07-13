@@ -1,6 +1,7 @@
 import { db } from "@/db"
 import { mapRow } from "@/db/utils"
 import { documents } from "@/db/schema"
+import { resolveDocumentFileUrl } from "@/lib/documents"
 import type { Document } from "./documents-client"
 import { DocumentsClient } from "./documents-client"
 
@@ -21,7 +22,11 @@ export default function DocumentsPage() {
         id: d.id,
         title: d.title,
         description: d.description ?? null,
-        fileUrl: d.fileUrl ?? null,
+        fileUrl: resolveDocumentFileUrl({
+          title: d.title,
+          fileUrl: d.fileUrl ?? null,
+          fileType: d.fileType ?? null,
+        }),
         category: d.category,
         fileType: d.fileType ?? null,
         tags: d.tags as string[],

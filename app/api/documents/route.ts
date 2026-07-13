@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/db"
 import { documents } from "@/db/schema"
 import { mapRow } from "@/db/utils"
+import { resolveDocumentFileUrl } from "@/lib/documents"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -15,6 +16,14 @@ export async function GET(request: Request) {
     .from(documents)
     .all()
     .map((d) => mapRow(documents, d))
+    .map((d) => ({
+      ...d,
+      fileUrl: resolveDocumentFileUrl({
+        title: d.title,
+        fileUrl: d.fileUrl ?? null,
+        fileType: d.fileType ?? null,
+      }),
+    }))
 
   if (semesterNum) {
     all = all.filter(
