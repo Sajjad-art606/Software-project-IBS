@@ -739,45 +739,6 @@ async function seed() {
         },
       ],
     },
-    {
-      slug: "changing-modules",
-      title: "Changing or Selecting Modules",
-      description:
-        "How to change your module selection at the start of a semester in Felix.",
-      category: "enrollment",
-      estimatedTime: "1 hour",
-      relevantSemesters: [],
-      tags: ["modules", "course-selection", "felix", "enrollment", "electives"],
-      steps: [
-        {
-          id: 1,
-          title: "Check the module selection period",
-          description:
-            "Module selection is available for a limited window at the start of each semester. The dates are announced in Felix and via your HFU email.",
-        },
-        {
-          id: 2,
-          title: "Review the module catalog",
-          description:
-            "Consult the current module catalog (Modulhandbuch) to understand which modules are available, their prerequisites, and how many ECTS they award.",
-        },
-        {
-          id: 3,
-          title: "Log in to Felix and select modules",
-          description:
-            "Go to Felix → Meine Lehrveranstaltungen → Belegung. Select or deselect modules within the allowed window.",
-          links: [
-            { label: "Open Felix", url: "https://felix.hs-furtwangen.de/dmz/" },
-          ],
-        },
-        {
-          id: 4,
-          title: "Confirm your selections",
-          description:
-            "After making changes, confirm your selections. You will receive an email confirmation. Check that all your intended modules appear correctly.",
-        },
-      ],
-    },
   ]
 
   for (const guide of guideData) {
