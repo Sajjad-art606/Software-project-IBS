@@ -1,8 +1,10 @@
-import { db } from "@/db"
-import { guides } from "@/db/schema"
-import { mapRow } from "@/db/utils"
-import type { GuideCardData } from "@/components/guides/guide-card"
-import type { GuideStep } from "@/db/schema"
+import { db } from '@/db'
+import { guides } from '@/db/schema'
+import { mapRow } from '@/db/utils'
+import type { GuideCardData } from '@/components/guides/guide-card'
+import type { GuideStep } from '@/db/schema'
+import { cookies } from 'next/headers'
+import { COOKIE_NAME, decodeSession } from '@/lib/auth/session'
 
 export const metadata = {
   title: "Process Guides | IBS Student Hub",
@@ -11,12 +13,23 @@ export const metadata = {
 }
 import { GuidesClient } from "./guides-client"
 
-export default function GuidesPage() {
+export default async function GuidesPage() {
+  const cookieStore = await cookies()
+  const raw = cookieStore.get(COOKIE_NAME)?.value ?? null
+  const session = raw ? decodeSession(raw) : null
+  const semester = session?.semester ?? 1
+
   const allGuides = db
     .select()
     .from(guides)
     .all()
     .map((g) => mapRow(guides, g))
+    .filter(
+      (g) =>
+        (g.relevantSemesters as number[]).length > 0
+          ? (g.relevantSemesters as number[]).includes(semester)
+          : false,
+    )
     .map(
       (g): GuideCardData => ({
         id: g.id,

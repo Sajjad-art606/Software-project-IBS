@@ -273,7 +273,7 @@ async function seed() {
       slug: "getting-started-hfu-systems",
       title: "Getting Started with HFU Systems",
       description:
-        "A complete checklist to get all your university accounts and services set up in your first week.",
+        "A semester 1 checklist covering account activation, email setup, student ID collection, city registration, and first-week university setup.",
       category: "general",
       estimatedTime: "2 hours",
       relevantSemesters: [1],
@@ -283,7 +283,7 @@ async function seed() {
           id: 1,
           title: "Activate your HFU student account",
           description:
-            "Your student ID and initial password will be sent to your personal email after enrollment. Use these to first log in to the HFU portal (Felix).",
+            "After enrollment is completed, you will receive your HFU student ID and activation link by email. Use the HFU identity portal (Felix) to activate your account. This gives you access to MIO, LCOnline, your HFU email, library services, and Wi-Fi.",
           links: [
             {
               label: "Open HFU Portal (Felix)",
@@ -293,51 +293,27 @@ async function seed() {
         },
         {
           id: 2,
-          title: "Set up your HFU email (OWA)",
+          title: "Set up your HFU email",
           description:
-            "Your official HFU email address is firstname.lastname@hs-furtwangen.de. Log in to OWA and check that it works. All university communications will come here.",
+            "Your HFU email address is your main communication channel for lectures, exam information, semester registration, tuition, and university services. Check it regularly or forward it to a personal address if needed.",
           links: [
             {
-              label: "Open HFU Mailbox (OWA)",
+              label: "Open HFU Mailbox",
               url: "https://mailbox.hs-furtwangen.de/",
             },
           ],
         },
         {
           id: 3,
-          title: "Log in to LCOnline (Moodle)",
+          title: "Collect your student ID card",
           description:
-            "Use your HFU student credentials to access LCOnline. Your professors will post lecture slides, assignments, and announcements here.",
-          links: [
-            {
-              label: "Open LCOnline",
-              url: "https://lconline.hs-furtwangen.de/",
-            },
-          ],
+            "Pick up your student ID card from the responsible university office after enrollment. It is needed for library services, cafeteria payments, printing, building access, and student identification.",
         },
         {
           id: 4,
-          title: "Check your timetable on sPlan",
+          title: "Complete your city registration in Furtwangen",
           description:
-            "Your lecture schedule is published on sPlan. Look up your study program and semester to see when and where your lectures are.",
-          links: [
-            { label: "Open sPlan", url: "https://splan.hs-furtwangen.de/" },
-          ],
-        },
-        {
-          id: 5,
-          title: "Set up the HFU VPN",
-          description:
-            "To access library databases and some internal services from off-campus, you will need the HFU VPN. Contact IT Support Helpdesk for setup instructions.",
-          tips: [
-            "The VPN is required to access many resources when not on campus Wi-Fi.",
-          ],
-        },
-        {
-          id: 6,
-          title: "Get your student ID card",
-          description:
-            "Your physical student ID card can be collected from the Study Office. Bring your enrollment certificate. The card is used for the canteen, library, and printing.",
+            "After moving to Germany, register your address at the Bürgerbüro. You will need a permanent place of residence, the Wohnungsgeberbestätigung, your passport or ID, and the completed registration form. Keep the registration certificate safe because it is required for banking, insurance, and university procedures.",
         },
       ],
     },
@@ -345,44 +321,38 @@ async function seed() {
       slug: "enrollment-and-re-enrollment",
       title: "Enrollment & Re-enrollment (Rückmeldung)",
       description:
-        "How to stay enrolled each semester - pay the semester fee and confirm your re-enrollment on time.",
+        "How to stay enrolled each semester by checking deadlines, paying the contribution, and confirming your enrollment status.",
       category: "enrollment",
       estimatedTime: "30 minutes",
-      relevantSemesters: [],
+      relevantSemesters: [1, 2, 3, 4, 5, 6],
       tags: ["enrollment", "re-enrollment", "semester-fee", "rückmeldung"],
       steps: [
         {
           id: 1,
           title: "Check the re-enrollment deadline",
           description:
-            "The re-enrollment deadline is typically in January (for summer semester) and July (for winter semester). Check the Study Office website for exact dates.",
-          tips: [
-            "Missing the deadline results in a late fee or even exmatriculation.",
-          ],
+            "HFU announces the official re-enrollment period before each semester. Verify the deadline through your HFU email or MIO. Missing the deadline may cause late fees or exmatriculation.",
         },
         {
           id: 2,
-          title: "Pay the semester fee (Semesterbeitrag)",
+          title: "Pay the semester contribution",
           description:
-            "Transfer the semester fee to the university bank account. The amount includes the student union contribution (AStA) and public transport ticket. Details are sent to your HFU email.",
-          tips: [
-            "Use the exact reference number (Verwendungszweck) provided - this links the payment to your account.",
-          ],
+            "Transfer the required semester contribution using the correct payment reference (Verwendungszweck). Payment instructions are provided by the university, and the correct reference ensures your payment reaches your student account.",
         },
         {
           id: 3,
-          title: "Confirm re-enrollment in MIO/QIS",
+          title: "Verify your enrollment status",
           description:
-            "After the payment is processed (can take 2-3 business days), log in to MIO/QIS and confirm your re-enrollment. Download your new enrollment certificate.",
+            "After the payment is processed, log in to MIO/QIS and check that your enrollment has been renewed successfully. Download your updated enrollment certificate (Immatrikulationsbescheinigung).",
           links: [
             { label: "Open MIO/QIS", url: "https://mio.hs-furtwangen.de/" },
           ],
         },
         {
           id: 4,
-          title: "Update your student ID card",
+          title: "Validate your student ID card",
           description:
-            "Once re-enrolled, update your physical student ID card at the validation terminals located in the university buildings.",
+            "Update your student ID card at one of the validation terminals on campus so it remains valid for the new semester.",
         },
       ],
     },
@@ -390,39 +360,33 @@ async function seed() {
       slug: "exam-registration",
       title: "Registering for Exams",
       description:
-        "How to register and deregister for exams in MIO/QIS within the registration period.",
+        "How to register and deregister for examinations during the official examination registration period.",
       category: "exams",
       estimatedTime: "20 minutes",
-      relevantSemesters: [],
+      relevantSemesters: [1, 2, 3, 4, 5, 6, 7],
       tags: ["exams", "registration", "mio", "qis", "deregistration"],
       steps: [
         {
           id: 1,
-          title: "Check the exam registration period",
+          title: "Check the examination registration period",
           description:
-            "Exam registration opens several weeks before the exam period. The exact dates are published on the HFU website and sent via your HFU email. You can also check MIO/QIS.",
+            "HFU publishes the official examination registration period before each examination phase. Check your HFU email, MIO, or the university website for the exact registration and deregistration deadlines.",
         },
         {
           id: 2,
-          title: "Log in to MIO/QIS and register",
+          title: "Verify your registrations",
           description:
-            "Go to MIO/QIS → Prüfungsverwaltung → Prüfungsanmeldung. Select the exams you want to take and confirm registration. You will receive a confirmation.",
+            "After registering, review the list of registered examinations in MIO. Check that the correct modules and examination types are displayed.",
           links: [
             { label: "Open MIO/QIS", url: "https://mio.hs-furtwangen.de/" },
           ],
         },
         {
           id: 3,
-          title: "Verify your registrations",
+          title: "Deregister if necessary",
           description:
-            'After registering, go to "Angemeldete Prüfungen" to see all your registered exams. Double-check the dates, times, and rooms.',
-        },
-        {
-          id: 4,
-          title: "Deregister if needed",
-          description:
-            "You can deregister from exams within the deregistration period (usually ends a few days before the exam). After that, you must show a medical certificate to be excused.",
-          tips: ["An unexcused absence counts as a failed attempt."],
+            "If you decide not to take an examination, deregister within the official deregistration period. After the deadline, withdrawal is only possible according to the university examination regulations, for example due to illness with the required documentation.",
+          tips: ["Missing an examination without an accepted reason is treated according to the relevant examination regulations."],
         },
       ],
     },
@@ -430,7 +394,7 @@ async function seed() {
       slug: "internship-preparation",
       title: "Preparing for Your Practical Semester",
       description:
-        "What to do in Semester 3 to find and prepare for your practical semester (internship) in Semester 4.",
+        "What to do in Semester 3 to prepare for your practical semester (internship) in Semester 4.",
       category: "internship",
       estimatedTime: "1-2 weeks",
       relevantSemesters: [3],
@@ -489,10 +453,10 @@ async function seed() {
       slug: "internship-registration",
       title: "Internship Registration Process",
       description:
-        "Step-by-step guide to officially register your internship with the university.",
+        "Step-by-step guide to officially register your internship with the university in Semester 4 or 5.",
       category: "internship",
       estimatedTime: "3-5 days",
-      relevantSemesters: [4],
+      relevantSemesters: [4, 5],
       tags: [
         "internship",
         "registration",
@@ -675,10 +639,10 @@ async function seed() {
       slug: "thesis-registration",
       title: "Bachelor Thesis Registration",
       description:
-        "How to officially register your bachelor thesis topic and begin the writing period.",
+        "How to officially register your bachelor thesis topic and begin the writing period in Semester 6 or 7.",
       category: "thesis",
       estimatedTime: "1 week",
-      relevantSemesters: [5, 6, 7],
+      relevantSemesters: [6, 7],
       tags: [
         "thesis",
         "bachelor-thesis",
@@ -737,10 +701,10 @@ async function seed() {
       slug: "using-moodle-lconline",
       title: "Using LCOnline (Moodle)",
       description:
-        "How to navigate Moodle, find your courses, and access lecture materials and assignments.",
+        "How to use LCOnline during Semester 1 to 3 for course rooms, materials, announcements, and timetable updates.",
       category: "general",
       estimatedTime: "45 minutes",
-      relevantSemesters: [1],
+      relevantSemesters: [1, 2, 3],
       tags: [
         "moodle",
         "lconline",
@@ -754,7 +718,7 @@ async function seed() {
           id: 1,
           title: "Log in to LCOnline",
           description:
-            "Go to LCOnline and log in with your HFU student credentials (same username and password as Felix).",
+            "Use your HFU credentials to access LCOnline. Each lecturer creates course rooms where lecture slides, assignments, announcements, quizzes, and other learning materials are published.",
           links: [
             {
               label: "Open LCOnline",
@@ -764,72 +728,16 @@ async function seed() {
         },
         {
           id: 2,
-          title: "Find your course rooms",
-          description:
-            "Your professors will have created course rooms for each module. Some rooms require a self-enrollment key - your professor will provide this in the first lecture.",
-          tips: [
-            "If you cannot find a course room, check if you need to search by the exact module name or ask your professor.",
-          ],
-        },
-        {
-          id: 3,
           title: "Download lecture materials",
           description:
-            "Lecture slides, handouts, and reading materials are uploaded by professors to the course rooms. Check regularly as new materials are added throughout the semester.",
-        },
-        {
-          id: 4,
-          title: "Submit assignments",
-          description:
-            'Many professors use Moodle for assignment submissions. Look for "Abgabe" or "Assignment" sections in your course room. Pay attention to submission deadlines.',
-          tips: [
-            "Submit well before the deadline - late submissions may not be accepted.",
-          ],
-        },
-        {
-          id: 5,
-          title: "Check for announcements",
-          description:
-            "Professors post important announcements (lecture cancellations, room changes, exam info) in Moodle. Make sure email notifications from LCOnline go to your HFU email.",
-        },
-      ],
-    },
-    {
-      slug: "changing-modules",
-      title: "Changing or Selecting Modules",
-      description:
-        "How to change your module selection at the start of a semester in Felix.",
-      category: "enrollment",
-      estimatedTime: "1 hour",
-      relevantSemesters: [],
-      tags: ["modules", "course-selection", "felix", "enrollment", "electives"],
-      steps: [
-        {
-          id: 1,
-          title: "Check the module selection period",
-          description:
-            "Module selection is available for a limited window at the start of each semester. The dates are announced in Felix and via your HFU email.",
-        },
-        {
-          id: 2,
-          title: "Review the module catalog",
-          description:
-            "Consult the current module catalog (Modulhandbuch) to understand which modules are available, their prerequisites, and how many ECTS they award.",
+            "Lecture slides, assignments, reading materials, and additional resources are uploaded regularly. Download or review the newest files before every lecture.",
         },
         {
           id: 3,
-          title: "Log in to Felix and select modules",
+          title: "Check announcements and timetable",
           description:
-            "Go to Felix → Meine Lehrveranstaltungen → Belegung. Select or deselect modules within the allowed window.",
-          links: [
-            { label: "Open Felix", url: "https://felix.hs-furtwangen.de/dmz/" },
-          ],
-        },
-        {
-          id: 4,
-          title: "Confirm your selections",
-          description:
-            "After making changes, confirm your selections. You will receive an email confirmation. Check that all your intended modules appear correctly.",
+            "Lecturers publish important updates about cancellations, room changes, exam information, and assignment changes. Check LCOnline frequently and review your timetable on sPlan before the semester begins.",
+          links: [{ label: "Open sPlan", url: "https://splan.hs-furtwangen.de/" }],
         },
       ],
     },
